@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+  <head>
+    <script src="./assets/js/color-modes.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="Kiku" />
+    <title>Analyzing the effect of Surface Slap on Big Fish bite rates</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        width: 100%;
+        height: 3rem;
+        background-color: rgba(0, 0, 0, 0.1);
+        border: solid rgba(0, 0, 0, 0.15);
+        border-width: 1px 0;
+        box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1),
+          inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -0.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .btn-bd-primary {
+        --bd-violet-bg: #712cf9;
+        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+        --bs-btn-font-weight: 600;
+        --bs-btn-color: var(--bs-white);
+        --bs-btn-bg: var(--bd-violet-bg);
+        --bs-btn-border-color: var(--bd-violet-bg);
+        --bs-btn-hover-color: var(--bs-white);
+        --bs-btn-hover-bg: #6528e0;
+        --bs-btn-hover-border-color: #6528e0;
+        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+        --bs-btn-active-color: var(--bs-btn-hover-color);
+        --bs-btn-active-bg: #5a23c8;
+        --bs-btn-active-border-color: #5a23c8;
+      }
+
+      .bd-mode-toggle {
+        z-index: 1500;
+      }
+
+      .bd-mode-toggle .dropdown-menu .active .bi {
+        display: block !important;
+      }
+    </style>
+  </head>
+  <body>
+    <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+      <symbol id="check2" viewBox="0 0 16 16">
+        <path
+          d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"
+        />
+      </symbol>
+      <symbol id="circle-half" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z" />
+      </symbol>
+      <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+        <path
+          d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"
+        />
+        <path
+          d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"
+        />
+      </symbol>
+      <symbol id="sun-fill" viewBox="0 0 16 16">
+        <path
+          d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"
+        />
+      </symbol>
+    </svg>
+    <div
+      class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle"
+    >
+      <button
+        class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center"
+        id="bd-theme"
+        type="button"
+        aria-expanded="false"
+        data-bs-toggle="dropdown"
+        aria-label="Toggle theme (auto)"
+      >
+        <svg class="bi my-1 theme-icon-active" width="1em" height="1em">
+          <use href="#circle-half"></use>
+        </svg>
+        <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
+      </button>
+      <ul
+        class="dropdown-menu dropdown-menu-end shadow"
+        aria-labelledby="bd-theme-text"
+      >
+        <li>
+          <button
+            type="button"
+            class="dropdown-item d-flex align-items-center"
+            data-bs-theme-value="light"
+            aria-pressed="false"
+          >
+            <svg class="bi me-2 opacity-50" width="1em" height="1em">
+              <use href="#sun-fill"></use>
+            </svg>
+            Light
+            <svg class="bi ms-auto d-none" width="1em" height="1em">
+              <use href="#check2"></use>
+            </svg>
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            class="dropdown-item d-flex align-items-center"
+            data-bs-theme-value="dark"
+            aria-pressed="false"
+          >
+            <svg class="bi me-2 opacity-50" width="1em" height="1em">
+              <use href="#moon-stars-fill"></use>
+            </svg>
+            Dark
+            <svg class="bi ms-auto d-none" width="1em" height="1em">
+              <use href="#check2"></use>
+            </svg>
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            class="dropdown-item d-flex align-items-center active"
+            data-bs-theme-value="auto"
+            aria-pressed="true"
+          >
+            <svg class="bi me-2 opacity-50" width="1em" height="1em">
+              <use href="#circle-half"></use>
+            </svg>
+            Auto
+            <svg class="bi ms-auto d-none" width="1em" height="1em">
+              <use href="#check2"></use>
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+    <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+      <symbol id="arrow-right-circle" viewBox="0 0 16 16">
+        <path
+          d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"
+        />
+      </symbol>
+      <symbol id="bootstrap" viewBox="0 0 118 94">
+        <title>Bootstrap</title>
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z"
+        ></path>
+      </symbol>
+    </svg>
+    <div class="col-lg-8 mx-auto p-4 py-md-5">
+      <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+        <span class="fs-3"
+          >Kiku's Fishing Guide - Analyzing the effect of Surface Slap on big
+          fish bite rates</span
+        >
+      </header>
+      <main class="col-md-8">
+        <h2 class="text-body-emphasis">Introduction</h2>
+        <p class="fs-5">
+          Hi, I'm Kiku. In 2019 (late Stormblood) I wrote a
+          <a
+            href="https://na.finalfantasyxiv.com/lodestone/character/11519702/blog/4290487/"
+            >blog post</a
+          >
+          on the Lodestone explaining various fishing mechanics in FFXIV. At
+          that time, there were not many resources related to fishing readily
+          available to the public, and my goal was to make knowledge of fishing
+          mechanics more easily accesible for players interested in fishing.
+          When Shadowbringers came out, I gradually updated the guide with
+          information about the newly added skills at that time, up until 2021.
+        </p>
+        <p class="fs-5">
+          I'm writing this post in 2024 and the availability of quality fishing
+          resources is much better, which is partly why I haven't updated my
+          guide for changes released in Endwalker. However, one thing I'd like
+          to address in this post and for which I caught a lot of flak for when
+          I first wrote it in 2021 was this line from Part 2 of my fishing
+          guide:
+        </p>
+        <figure>
+          <blockquote class="blockquote">
+            <p>
+              <strong>
+                Surface Slap won't directly increase your chances of landing a
+                bite of a big fish, but it can be used to indirectly gain more
+                casts in a window if you use it to filter out a fish with a long
+                bite time.
+              </strong>
+            </p>
+          </blockquote>
+          <figcaption class="blockquote-footer">
+            <a
+              href="https://na.finalfantasyxiv.com/lodestone/character/11519702/blog/4290489/"
+            >
+              <cite title="Source Title">Kiku's Fishing Guide Part 2</cite>
+            </a>
+          </figcaption>
+        </figure>
+        <p class="fs-5">
+          Some people weren't happy with me for claiming (without evidence,
+          admittedly) that Surface Slap does not influence bite rates for big
+          fish. The popular sentiment I see in fishing discussions is that, when
+          targeting a big fish, it is advantageous to use Surface Slap because
+          it would raise the bite rate of the big fish by removing the slapped
+          fish from the pool. On the surface, this seems like a reasonable
+          interpretation of the skill's tooltip. However, the reason I have
+          never removed the above quote from my fishing guide is because,
+          contrary to the prevailing opinion, I personally do not believe that
+          Surface Slap increases the bite rate of big fish apart from a singular
+          edge case (The Unconditional). To clarify, I believe that the
+          developers intentionally programmed Surface Slap to not have an effect
+          on modifying big fish bite rates unless a big fish is the only
+          remaining option in the pool after using Surface Slap.
+        </p>
+        <p class="fs-5">
+          It's think it's fair to criticize me for making unsubstantiated
+          claims, but in the 5 years since I wrote that line
+          <strong>
+            I have not seen a single person provide any sort of hard evidence or
+            data to disprove what I originally claimed.
+          </strong>
+          Sure, to some degree the burden is on me to provide proof of my
+          claims, but I don't think it is unreasonable to verify what is
+          popularly believed to be true.
+        </p>
+        <p class="fs-5">
+          Today, I am writing this post to share that I have finally conducted
+          my own tests on Surface Slap and I will be documenting the results of
+          these tests below. Truthfully, I have been wanting to conduct a study
+          on Surface Slap since the end of Shadowbringers, but I have had
+          neither the time nor the motivation to finish this project until now
+          (only a few days before Dawntrail releases, I might add).
+        </p>
+        <hr class="col-3 col-md-2 mb-5" />
+        <h2 class="text-body-emphasis">Testing methodology</h2>
+        <p class="fs-5">
+          I conducted a study on big fish bite rates by examining bite rates at
+          a single fishing hole under the following conditions.
+        </p>
+        <ol>
+          <li>
+            The big fish must be a straight catch and have 100% uptime to make
+            it easier to collect the data.
+          </li>
+          <li>
+            Bites while Surface Slap is active will not be hooked so that
+            Surface Slap need not be constantly reapplied.
+          </li>
+          <li>
+            The big fish must be the only !!! bite in the pool to be able to
+            identify it without catching it and breaking Surface Slap.
+          </li>
+          <li>
+            A minimum of 1000 casts with and without Surface Slap active to
+            provide a decent sample size.
+          </li>
+          <li>
+            A fish will be picked after determining the ratio of each fish in
+            the pool, and Surface Slap will be used on this and only this fish.
+          </li>
+          <li>
+            Chum and Hi-Cordials will be used to speed up data collection.
+          </li>
+        </ol>
+        <p class="fs-5">
+          These conditions allow me to estimate the baseline bite rate of each
+          fish in the fishing hole without Surface Slap. After establishing the
+          baseline, I will check the bite rates while Surface Slap is active and
+          see if the bite rate of the big fish is significantly impacted by
+          Surface Slap using statistical analysis methods.
+        </p>
+        <p class="fs-5">
+          I chose
+          <a href="https://ffxivteamcraft.com/db/en/item/23064/The-Gambler"
+            >The Gambler</a
+          >
+          at the fishing hole
+          <a href="https://ffxivteamcraft.com/db/en/fishing-spot/197/Shirogane"
+            >Shirogane</a
+          >
+          for this study. Apart from fulfilling the first condition above, there
+          isn't anything special about this fishing hole other than the fact
+          that my player estate is located at Shirogane and it is convenient for
+          me to access it.
+        </p>
+        <h2 class="text-body-emphasis">
+          Results of 1034 casts without Surface Slap (
+          <a href="./unslapped.json">Raw data here</a>
+          )
+        </h2>
+        <h4 class="text-body-emphasis">Individual breakdown</h4>
+        <div class="">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Fish</th>
+                <th>Count</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  Grinning Anchovy (!)
+                  <code>CatchItemId === 20092</code>
+                </td>
+                <td>186</td>
+              </tr>
+              <tr>
+                <td>
+                  Glass Tuna (!!)
+                  <code>CatchItemId === 20110</code>
+                </td>
+                <td>295</td>
+              </tr>
+              <tr>
+                <td>
+                  Ruby Shrimp (!)
+                  <code>CatchItemId === 20112</code>
+                </td>
+                <td>188</td>
+              </tr>
+              <tr>
+                <td>
+                  Striped Fugu (!!)
+                  <code>CatchItemId === 20113</code>
+                </td>
+                <td>293</td>
+              </tr>
+              <tr>
+                <td>
+                  The Gambler (!!!)
+                  <code>CatchItemId === 23064</code>
+                </td>
+                <td>47</td>
+              </tr>
+              <tr>
+                <td>
+                  <em>Uncaught weak bite (!)</em>
+                  <code>CatchItemId === 0 && Tug === 36</code>
+                </td>
+                <td>9</td>
+              </tr>
+              <tr>
+                <td>
+                  <em>Uncaught strong bite (!!)</em>
+                  <code>CatchItemId === 0 && Tug === 37</code>
+                </td>
+                <td>7</td>
+              </tr>
+              <tr>
+                <td>
+                  <em>Uncaught legendary bite (!!!)</em>
+                  <code>CatchItemId === 0 && Tug === 38</code>
+                </td>
+                <td>9</td>
+              </tr>
+              <tr>
+                <td>Total</td>
+                <td>1034</td>
+              </tr>
+            </tbody>
+          </table>
+          <h4 class="text-body-emphasis">By bite strength</h4>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Bite</th>
+                <th>Count</th>
+                <th>Ratio (rounded to two decimal places)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  Weak bite (!)
+                  <code>Tug === 36</code>
+                </td>
+                <td>383</td>
+                <td>37.04%</td>
+              </tr>
+              <tr>
+                <td>
+                  Strong bite (!!)
+                  <code>Tug === 37</code>
+                </td>
+                <td>595</td>
+                <td>57.54%</td>
+              </tr>
+              <tr>
+                <td>
+                  Legendary bite (!!!)
+                  <code>Tug === 38</code>
+                </td>
+                <td>56</td>
+                <td>5.42%</td>
+              </tr>
+              <tr>
+                <td>Total</td>
+                <td>1034</td>
+                <td>100.00%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="fs-5">
+          Some bites went uncaught either to due the fish escaping, or me
+          failing to press hook. These failed casts are included in the dataset
+          to more accurately represent the bite ratios. The reason I did over
+          1000 casts was because I selected a fish to Surface Slap only after
+          reaching 1000 casts, and it was necessary to catch it a few times to
+          reapply Surface Slap due to hitting amiss.
+        </p>
+        <h2 class="text-body-emphasis">
+          Results of 1000 casts with Surface Slap used on Glass Tuna (
+          <a href="./slapped.json">Raw data here</a>
+          )
+        </h2>
+        <div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Bite</th>
+                <th>Count</th>
+                <th>Ratio (rounded to two decimal places)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  Weak bite (!)
+                  <code>Tug === 36</code>
+                </td>
+                <td>528</td>
+                <td>52.80%</td>
+              </tr>
+              <tr>
+                <td>
+                  Strong bite (!!)
+                  <code>Tug === 37</code>
+                </td>
+                <td>414</td>
+                <td>41.40%</td>
+              </tr>
+              <tr>
+                <td>
+                  Legendary bite (!!!)
+                  <code>Tug === 38</code>
+                </td>
+                <td>58</td>
+                <td>5.80%</td>
+              </tr>
+              <tr>
+                <td>Total</td>
+                <td>1000</td>
+                <td>100.00%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="fs-5">
+          Glass Tuna was selected as the fish to Surface Slap. Supposing that
+          Surface Slap
+          <em>does</em>
+          have an effect on big fish bite rate and that the effect is
+          proportional to the Surface Slap target's ratio, I chose the fish
+          which had the highest proportion in the fishing hole. Looking at the
+          data, I suspect that Striped Fugu has an equal bite rate to that of
+          Glass Tuna, but it is not terribly important which fish is chosen as
+          the Surface Slap target as long as it is consistent for all 1000
+          casts.
+        </p>
+        <h2 class="text-body-emphasis">Analysis of results</h2>
+        <p class="fs-5">
+          As you can see, a 0.38% difference in the legendary bite ratio is not
+          terribly high, which already suggests that Surface Slap made little to
+          no difference. However, we can use statistics to make a stronger
+          statement.
+        </p>
+        <p class="fs-5">
+          I apologize in advance for any mathematical errors in this section, as
+          it has been quite a while since I've touched upon statistics in my
+          personal life. Regardless, it is beyond the scope of this post to
+          explain the reasoning behind the formulae used; please verify on your
+          own if you do not trust my calculations. I will do my best to try to
+          briefly explain some concepts for those without any knowledge of
+          statistics.
+        </p>
+        <p class="fs-5">
+          Simply put, we want to determine whether or not the two samples differ
+          significantly based on whether or not Surface Slap is used. We will
+          start with what is called a "null hypothesis" and see if the data is
+          strong enough to reject it. The null hypothesis for this analysis is:
+        </p>
+        <figure>
+          <blockquote class="blockquote">
+            <p>
+              <strong>
+                Surface Slap does not affect the bite rates of big fish.
+              </strong>
+            </p>
+          </blockquote>
+        </figure>
+        <p class="fs-5">
+          Using the numbers from the dataset, we can calculate something called
+          a z-score; if the value of the z-score is between a certain range,
+          then we cannot reject the null hypothesis. We will set a 95%
+          confidence level for our test, so the range will be from -1.96 to
+          1.96. The formula used for calculating the z-score is as follows:
+        </p>
+        <div class="mb-3">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mi>Z</mi>
+            <mo>=</mo>
+            <mstyle displaystyle="true" scriptlevel="0">
+              <mfrac>
+                <mrow>
+                  <mo stretchy="false">(</mo>
+                  <msub>
+                    <mrow data-mjx-texclass="ORD">
+                      <mover>
+                        <mi>p</mi>
+                        <mo stretchy="false">^</mo>
+                      </mover>
+                    </mrow>
+                    <mn>1</mn>
+                  </msub>
+                  <mo>&#x2212;</mo>
+                  <msub>
+                    <mrow data-mjx-texclass="ORD">
+                      <mover>
+                        <mi>p</mi>
+                        <mo stretchy="false">^</mo>
+                      </mover>
+                    </mrow>
+                    <mn>2</mn>
+                  </msub>
+                  <mo stretchy="false">)</mo>
+                  <mo>&#x2212;</mo>
+                  <mn>0</mn>
+                </mrow>
+                <msqrt>
+                  <mrow data-mjx-texclass="ORD">
+                    <mover>
+                      <mi>p</mi>
+                      <mo stretchy="false">^</mo>
+                    </mover>
+                  </mrow>
+                  <mo stretchy="false">(</mo>
+                  <mn>1</mn>
+                  <mo>&#x2212;</mo>
+                  <mrow data-mjx-texclass="ORD">
+                    <mover>
+                      <mi>p</mi>
+                      <mo stretchy="false">^</mo>
+                    </mover>
+                  </mrow>
+                  <mo stretchy="false">)</mo>
+                  <mrow data-mjx-texclass="INNER">
+                    <mo data-mjx-texclass="OPEN">(</mo>
+                    <mstyle displaystyle="true" scriptlevel="0">
+                      <mfrac>
+                        <mn>1</mn>
+                        <msub>
+                          <mi>n</mi>
+                          <mn>1</mn>
+                        </msub>
+                      </mfrac>
+                    </mstyle>
+                    <mo>+</mo>
+                    <mstyle displaystyle="true" scriptlevel="0">
+                      <mfrac>
+                        <mn>1</mn>
+                        <msub>
+                          <mi>n</mi>
+                          <mn>2</mn>
+                        </msub>
+                      </mfrac>
+                    </mstyle>
+                    <mo data-mjx-texclass="CLOSE">)</mo>
+                  </mrow>
+                </msqrt>
+              </mfrac>
+            </mstyle>
+          </math>
+        </div>
+        <p class="fs-5">
+          We'll substitute the variables using our data as follows:
+        </p>
+        <p class="fs-5">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mstyle displaystyle="true" scriptlevel="0">
+              <msub>
+                <mrow data-mjx-texclass="ORD">
+                  <mover>
+                    <mi>p</mi>
+                    <mo stretchy="false">^</mo>
+                  </mover>
+                </mrow>
+                <mn>1</mn>
+              </msub>
+            </mstyle>
+          </math>
+          is the proportion of population 1: 0.0542 (rounded here, actual value
+          used for the final calculation is 56/1034)
+        </p>
+        <p class="fs-5">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mstyle displaystyle="true" scriptlevel="0">
+              <msub>
+                <mrow data-mjx-texclass="ORD">
+                  <mover>
+                    <mi>p</mi>
+                    <mo stretchy="false">^</mo>
+                  </mover>
+                </mrow>
+                <mn>2</mn>
+              </msub>
+            </mstyle>
+          </math>
+          is the proportion of population 2: 0.058
+        </p>
+        <p class="fs-5">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mstyle displaystyle="true" scriptlevel="0">
+              <msub>
+                <mrow data-mjx-texclass="ORD">
+                  <mover>
+                    <mi>n</mi>
+                    <mo stretchy="false">^</mo>
+                  </mover>
+                </mrow>
+                <mn>1</mn>
+              </msub>
+            </mstyle>
+          </math>
+          is the sample size of population 1: 1034
+        </p>
+        <p class="fs-5">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mstyle displaystyle="true" scriptlevel="0">
+              <msub>
+                <mrow data-mjx-texclass="ORD">
+                  <mover>
+                    <mi>p</mi>
+                    <mo stretchy="false">^</mo>
+                  </mover>
+                </mrow>
+                <mn>2</mn>
+              </msub>
+            </mstyle>
+          </math>
+          is the sample size of population 2: 1000
+        </p>
+        <p class="fs-5">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mstyle displaystyle="true" scriptlevel="0">
+              <mrow data-mjx-texclass="ORD">
+                <mover>
+                  <mi>p</mi>
+                  <mo stretchy="false">^</mo>
+                </mover>
+              </mrow>
+            </mstyle>
+          </math>
+          is the overall sample proportion calculated by this formula:
+        </p>
+        <div class="mb-3">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mrow data-mjx-texclass="ORD">
+              <mover>
+                <mi>p</mi>
+                <mo stretchy="false">^</mo>
+              </mover>
+            </mrow>
+            <mo>=</mo>
+            <mstyle displaystyle="true" scriptlevel="0">
+              <mfrac>
+                <mrow>
+                  <msub>
+                    <mi>Y</mi>
+                    <mn>1</mn>
+                  </msub>
+                  <mo>+</mo>
+                  <msub>
+                    <mi>Y</mi>
+                    <mn>2</mn>
+                  </msub>
+                </mrow>
+                <mrow>
+                  <msub>
+                    <mi>n</mi>
+                    <mn>1</mn>
+                  </msub>
+                  <mo>+</mo>
+                  <msub>
+                    <mi>n</mi>
+                    <mn>2</mn>
+                  </msub>
+                </mrow>
+              </mfrac>
+            </mstyle>
+          </math>
+        </div>
+        <p class="fs-5">Where:</p>
+        <p class="fs-5">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mstyle displaystyle="true" scriptlevel="0">
+              <msub>
+                <mi>Y</mi>
+                <mn>1</mn>
+              </msub>
+            </mstyle>
+          </math>
+          is the actual number observed in population 1: 56
+        </p>
+        <p class="fs-5">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mstyle displaystyle="true" scriptlevel="0">
+              <msub>
+                <mi>Y</mi>
+                <mn>2</mn>
+              </msub>
+            </mstyle>
+          </math>
+          is the actual number observed in population 2: 58
+        </p>
+        <p class="fs-5">This gives us:</p>
+        <div class="mb-3">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mrow data-mjx-texclass="ORD">
+              <mover>
+                <mi>p</mi>
+                <mo stretchy="false">^</mo>
+              </mover>
+            </mrow>
+            <mo>=</mo>
+            <mstyle displaystyle="true" scriptlevel="0">
+              <mfrac>
+                <mrow>
+                  <mn>56</mn>
+                  <mo>+</mo>
+                  <mn>58</mn>
+                </mrow>
+                <mrow>
+                  <mn>1034</mn>
+                  <mo>+</mo>
+                  <mn>1000</mn>
+                </mrow>
+              </mfrac>
+            </mstyle>
+          </math>
+        </div>
+        <p class="fs-5">
+          Which equals: 0.056 (rounded here, actual value used in the final
+          calculation is 114/2034)
+        </p>
+        <p class="fs-5">
+          Plugging all the values into our first equation gives us this:
+        </p>
+        <div class="mb-3">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mi>Z</mi>
+            <mo>=</mo>
+            <mstyle displaystyle="true" scriptlevel="0">
+              <mfrac>
+                <mrow>
+                  <mo stretchy="false">(</mo>
+                  <mn>0.0542</mn>
+                  <mo>&#x2212;</mo>
+                  <mn>0.058</mn>
+                  <mo stretchy="false">)</mo>
+                  <mo>&#x2212;</mo>
+                  <mn>0</mn>
+                </mrow>
+                <msqrt>
+                  <mrow data-mjx-texclass="ORD">
+                    <mn>0.056</mn>
+                  </mrow>
+                  <mo stretchy="false">(</mo>
+                  <mn>1</mn>
+                  <mo>&#x2212;</mo>
+                  <mrow data-mjx-texclass="ORD">
+                    <mn>0.056</mn>
+                  </mrow>
+                  <mo stretchy="false">)</mo>
+                  <mrow data-mjx-texclass="INNER">
+                    <mo data-mjx-texclass="OPEN">(</mo>
+                    <mstyle displaystyle="true" scriptlevel="0">
+                      <mfrac>
+                        <mn>1</mn>
+                        <mn>1034</mn>
+                      </mfrac>
+                    </mstyle>
+                    <mo>+</mo>
+                    <mstyle displaystyle="true" scriptlevel="0">
+                      <mfrac>
+                        <mn>1</mn>
+                        <mn>1000</mn>
+                      </mfrac>
+                    </mstyle>
+                    <mo data-mjx-texclass="CLOSE">)</mo>
+                  </mrow>
+                </msqrt>
+              </mfrac>
+            </mstyle>
+          </math>
+        </div>
+        <p class="fs-5">
+          Which gives us a z-score of -0.3765. Because our z-score falls between
+          the range (-1.96 &#60; -0.3765 &#60; 1.96 ) as determined by our
+          selected confidence level, we cannot reject the null hypothesis.
+        </p>
+        <h2 class="text-body-emphasis">So what does this mean?</h2>
+        <p class="fs-5">
+          The analysis suggests that no significant difference in bite rate for
+          the big fish was observed between the two populations when Surface
+          Slap was used. This does not necessarily mean that the the null
+          hypothesis is true, only that the evidence did not prove the null
+          hypothesis to be false. At the very least,
+          <strong
+            >the test did not demonstrate any connection between Surface Slap
+            and big fish bite rates</strong
+          >, which lends some credence to my original claim.
+        </p>
+        <hr class="col-3 col-md-2 mb-5" />
+        <h2 class="text-body-emphasis">Conclusion</h2>
+        <p class="fs-5">
+          Let's be clear about something: This post is not about attacking
+          anyone who believes that Surface Slap works the way the tooltip
+          advertises. I put together this post out of my own personal interest
+          in the subject and to finally have some data to back up my original
+          claim.
+        </p>
+        <p class="fs-5">
+          I am also not saying that you should never use Surface Slap when
+          hunting a big fish. If you re-read the original quote from the guide,
+          I suggest a strategy of using Surface Slap to potentially increase the
+          number of attempts during a limited window. If there's anything to
+          take away from this post, it's that there's no sense in just using
+          Surface Slap on any random target for the sake of "thinning out the
+          pool".
+        </p>
+
+        <p class="fs-5">
+          I'm sure there will be some who will read this post and disagree with
+          the evidence and my conclusions. I encourage everyone to perform their
+          own trials and try to replicate the results shown here, especially in
+          other fishing holes. I highly doubt it, but there could be a chance
+          that the developers made Shirogane a special fishing hole that
+          interacts with Surface Slap differently. I'm joking, but it's always
+          good to have more data.
+        </p>
+
+        <p class="fs-5">
+          A counterargument from the armchair developers that I don't want to
+          hear is something along the lines of "it would be harder to code
+          Surface Slap to work a certain way". First of all, none of us here has
+          or ever will lay eyes on the backend code, so the presumed difficulty
+          of such an implementation is entirely speculative. Secondly, anyone
+          who has spent any meaningful amount of time in professional
+          development would know that if the business logic dictates that
+          something must behave a certain way, whether it would be more
+          difficult to implement it that way is largely irrelevant unless there
+          is some kind of unsurmountable technical challenge. Lastly, my
+          personal assessment is that it would not be terribly difficult to
+          implement some kind of check in the code to maintain a target bite
+          rate for Surface Slap; the solution would likely not be trivial, but I
+          do think it is rather embarrassing for any competent developer to
+          claim that such a check would be too difficult to code.
+        </p>
+        <hr class="col-3 col-md-2 mb-5" />
+        <h2 class="text-body-emphasis">
+          Preemptively addressing some questions
+        </h2>
+        <div class="fs-5">
+          <h3>How was the data collected?</h3>
+          <p class="fs-5">
+            I recorded and exported my fishing records using the GatherBuddy
+            add-on. I then wrote a script to interpret the data, available <a href="./stats.js">here</a>.
+          </p>
+          <h3>Why is there a time gap in the data?</h3>
+          <p class="fs-5">
+            The data is a bit intermittent at the start because I collected it
+            during the patch that Endwalker legendaries released and I
+            prioritized completing my fishing log over collecting the data.
+            There is another gap of several months where I was busy with other
+            things in my personal life that prevented me from finding the time
+            to properly sit down to fish.
+          </p>
+          <h3>Why didn't you pick some other fishing hole?</h3>
+          <p class="fs-5">
+            I suppose I could have optimized for a fishing hole with shorter
+            average bite times or cheaper bait, but I didn't think it was useful
+            to spend time trying to determine what the "best" fishing hole would
+            be.
+          </p>
+
+          <h3>
+            Why did you believe that Surface Slap does not affect big fish bite
+            rates in the first place?
+          </h3>
+          <p class="fs-5">
+            Let's call it my intuition as someone who has been fishing in this
+            game for several years. It feels naive that it would help the player
+            in that way, is what I'm saying. This is pure speculation on my
+            part, but I get the sense that whoever is designing fishing content
+            for FFXIV is not someone who would allow their carefully selected
+            bite rates to be affected by Surface Slap. My understanding of the
+            research I've seen by a moderator on the Fisherman's Horizon Discord
+            server about whether fish added by Studium/Facet quests affect big
+            fish bite rates seems to corroborate my theory.
+          </p>
+
+          <h3>
+            Why does the 10th entry in the
+            <code>slapped.json</code>
+            dataset have a caught fish?
+          </h3>
+          <p class="fs-5">
+            I saw and heard the visual and audio cue for a legendary bite, and
+            well, let's just say muscle memory is hard to break...
+          </p>
+          <h3>Can I contact you to discuss the results of this study?</h3>
+          <p class="fs-5">
+            Feel free to open an issue on this GitHub repository if you want to
+            contact me. You can also privately DM me on Discord @kikuflare if
+            you are in any mutual servers as me.
+          </p>
+        </div>
+        <hr class="col-3 col-md-2 mb-5" />
+        <div>
+          <h2 class="text-body-emphasis">Postscript</h2>
+
+          <p class="fs-5">
+            Feel free to stop reading here, this part is unrelated to the main
+            topic of this post.
+          </p>
+
+          <p class="fs-5">
+            For those still reading, I'd like to express my gratitude for
+            reading this far. I'd also like to use this part to say a few
+            things. Firstly, I apologize for the changing the URL for my weather
+            forecasting tool earlier this year. GitHub doesn't show me how often
+            the tool gets visited (and I have no interest in adding a
+            tracker), but it seems that quite a few people other than myself
+            have been using the tool, and there was some confusion when the URL
+            suddenly stopped worked due to my username change. Perhaps the issue
+            could have been mitigated if I informed someone about the URL change
+            but I don't actually interact with anyone else in the fishing
+            community.
+          </p>
+
+          <p class="fs-5">
+            As for future plans, I will continue to update my weather
+            forecasting tool (feature suggestions are welcomed by the way) but
+            otherwise, this post will probably be my last contribution to the
+            fishing community. While accessible to all FFXIV players, The
+            Lodestone is not exactly a great place to be making content on for
+            English speakers due to the 10000 character limit per post. I've had
+            to make compromises in regards to the quality of my fishing guide to
+            keep it within the limits of two posts, which has made updating them
+            difficult. Nevertheless, I hope my contributions have been helpful
+            in some way to the fishing community over the years and moving
+            forward, I wish everyone the best of luck in completing their
+            fishing goals.
+          </p>
+        </div>
+      </main>
+      <footer class="pt-5 my-5 text-body-secondary border-top">
+        - Written by Kiku -
+      </footer>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+  </body>
+</html>
+>
